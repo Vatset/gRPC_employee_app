@@ -1,0 +1,25 @@
+{
+  "data":[
+    {
+      "id": 1,
+      "displayName": "Alexey Alexeevich Alexeev",
+      "email": "dfghjkl@mail.ru",
+      "mobilePhone": "+4567890",
+      "workPhone": "6789"
+    },
+    {
+      "id": 2,
+      "displayName": "Petr Petrovich Petrov",
+      "email": "fghjk@gmail.com",
+      "mobilePhone": "+34567890",
+      "workPhone": "7890"
+    },
+    {
+      "id": 3,
+      "displayName": "Semyon Semyonovich Semenov",
+      "email": "cvbnm@mail.ru",
+      "mobilePhone": "+567890",
+      "workPhone": "7890"
+    }
+  ]
+}
