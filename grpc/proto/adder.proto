@@ -2,7 +2,6 @@ syntax = "proto3";
 package grpc;
 option go_package="dev.app.v1;app";
 
-
 service AppService {
   rpc GetEmployeesList(EmployeesRequest) returns (EmployeesAnswer);
   rpc GetEmployeeAbsencesInfo(EmployeesAbsencesRequest) returns (EmployeesAbsencesAnswer);

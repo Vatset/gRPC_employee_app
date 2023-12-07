@@ -402,7 +402,7 @@ func (x *EmployeesAbsencesRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use EmployeesAbsencesRequest.ProtoReflect.Descriptor instead.
+// Deprecated: Use EmployeesAbsencesRequest.ProtoReflect.Descriptor instead
 func (*EmployeesAbsencesRequest) Descriptor() ([]byte, []int) {
 	return file_proto_adder_proto_rawDescGZIP(), []int{5}
 }

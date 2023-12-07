@@ -19,7 +19,6 @@ func GetAllEmployeesAbsence(req *proto.EmployeesAbsencesRequest) ([]*proto.Emplo
 	if err != nil {
 		return nil, err
 	}
-
 	var dataProto gRPC_employee_app.EmployeeAbsencesListProto
 
 	err = json.Unmarshal(data, &dataProto)

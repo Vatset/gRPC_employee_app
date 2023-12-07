@@ -40,6 +40,5 @@ func MatchesFilter(filter *proto.EmployeesInfo, user *proto.EmployeesAnswerInfo)
 	if filter.Email != "" && filter.Email != user.Email {
 		return false
 	}
-
 	return true
 }

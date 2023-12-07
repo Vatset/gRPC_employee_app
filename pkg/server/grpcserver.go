@@ -41,7 +41,6 @@ func (s *GRPCServer) GetEmployeesList(ctx context.Context, req *proto.EmployeesR
 }
 
 func (s *GRPCServer) GetEmployeeAbsencesInfo(ctx context.Context, req *proto.EmployeesAbsencesRequest) (*proto.EmployeesAbsencesAnswer, error) {
-
 	data, err := functions.GetAllEmployeesAbsence(req)
 	if err != nil {
 		return nil, err
