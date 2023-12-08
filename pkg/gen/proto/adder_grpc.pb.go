@@ -18,12 +18,13 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// AppServiceClient is the client API for AppService service
+// AppServiceClient is the client API for AppService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AppServiceClient interface {
 	GetEmployeesList(ctx context.Context, in *EmployeesRequest, opts ...grpc.CallOption) (*EmployeesAnswer, error)
 	GetEmployeeAbsencesInfo(ctx context.Context, in *EmployeesAbsencesRequest, opts ...grpc.CallOption) (*EmployeesAbsencesAnswer, error)
+	UserEmoji(ctx context.Context, in *EmojiRequest, opts ...grpc.CallOption) (*EmojiAnswer, error)
 }
 
 type appServiceClient struct {
@@ -52,12 +53,22 @@ func (c *appServiceClient) GetEmployeeAbsencesInfo(ctx context.Context, in *Empl
 	return out, nil
 }
 
+func (c *appServiceClient) UserEmoji(ctx context.Context, in *EmojiRequest, opts ...grpc.CallOption) (*EmojiAnswer, error) {
+	out := new(EmojiAnswer)
+	err := c.cc.Invoke(ctx, "/grpc.AppService/UserEmoji", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AppServiceServer is the server API for AppService service.
 // All implementations must embed UnimplementedAppServiceServer
 // for forward compatibility
 type AppServiceServer interface {
 	GetEmployeesList(context.Context, *EmployeesRequest) (*EmployeesAnswer, error)
 	GetEmployeeAbsencesInfo(context.Context, *EmployeesAbsencesRequest) (*EmployeesAbsencesAnswer, error)
+	UserEmoji(context.Context, *EmojiRequest) (*EmojiAnswer, error)
 	mustEmbedUnimplementedAppServiceServer()
 }
 
@@ -70,6 +81,9 @@ func (UnimplementedAppServiceServer) GetEmployeesList(context.Context, *Employee
 }
 func (UnimplementedAppServiceServer) GetEmployeeAbsencesInfo(context.Context, *EmployeesAbsencesRequest) (*EmployeesAbsencesAnswer, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetEmployeeAbsencesInfo not implemented")
+}
+func (UnimplementedAppServiceServer) UserEmoji(context.Context, *EmojiRequest) (*EmojiAnswer, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserEmoji not implemented")
 }
 func (UnimplementedAppServiceServer) mustEmbedUnimplementedAppServiceServer() {}
 
@@ -120,6 +134,24 @@ func _AppService_GetEmployeeAbsencesInfo_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AppService_UserEmoji_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmojiRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppServiceServer).UserEmoji(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/grpc.AppService/UserEmoji",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppServiceServer).UserEmoji(ctx, req.(*EmojiRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AppService_ServiceDesc is the grpc.ServiceDesc for AppService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -134,6 +166,10 @@ var AppService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetEmployeeAbsencesInfo",
 			Handler:    _AppService_GetEmployeeAbsencesInfo_Handler,
+		},
+		{
+			MethodName: "UserEmoji",
+			Handler:    _AppService_UserEmoji_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

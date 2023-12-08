@@ -5,6 +5,7 @@ option go_package="dev.app.v1;app";
 service AppService {
   rpc GetEmployeesList(EmployeesRequest) returns (EmployeesAnswer);
   rpc GetEmployeeAbsencesInfo(EmployeesAbsencesRequest) returns (EmployeesAbsencesAnswer);
+  rpc UserEmoji(EmojiRequest) returns (EmojiAnswer);
 }
 
 message EmployeesInfo {
@@ -30,6 +31,14 @@ message EmployeesRequest {
 message EmployeesAnswer {
   string status = 1;
   repeated EmployeesAnswerInfo data = 2;
+}
+
+message EmojiRequest {
+  string email=1;
+}
+
+message EmojiAnswer {
+  string displayName = 1;
 }
 
 message EmployeesAbsencesInfo {

@@ -8,6 +8,7 @@ import (
 	_ "github.com/jackc/pgx/stdlib"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"log"
 )
 
 type GRPCServer struct {
@@ -65,4 +66,53 @@ func (s *GRPCServer) GetEmployeeAbsencesInfo(ctx context.Context, req *proto.Emp
 			Data:   filteredUsers,
 		}, nil
 	}
+}
+
+func (s *GRPCServer) UserEmoji(ctx context.Context, req *proto.EmojiRequest) (*proto.EmojiAnswer, error) {
+	data, err := functions.GetAllEmployees()
+	if err != nil {
+		return nil, err
+	}
+
+	info := &proto.EmployeesInfo{
+		Id:        0,
+		Name:      "",
+		WorkPhone: "",
+		Email:     req.Email,
+		DateTo:    "",
+		DateFrom:  "",
+	}
+
+	var filteredUsers []*proto.EmployeesAnswerInfo
+	for _, user := range data {
+		if functions.MatchesFilter(info, user) {
+			filteredUsers = append(filteredUsers, user)
+		}
+	}
+
+	for _, user := range filteredUsers {
+		name := user.DisplayName
+		absInfo := &proto.EmployeesAbsencesInfo{
+			Id:          0,
+			PersonId:    user.Id,
+			ReasonId:    0,
+			CreatedDate: "",
+			DateFrom:    "1000-12-12T23:59:59",
+			DateTo:      "9999-12-12T23:59:59",
+		}
+		absReq := &proto.EmployeesAbsencesRequest{
+			EmployeesAbsencesInfo: absInfo,
+		}
+		answ, err := s.GetEmployeeAbsencesInfo(ctx, absReq)
+		if err != nil {
+			log.Fatal(",ew")
+		}
+		for _, user := range answ.Data {
+			emojiAnswer := name + functions.GetEmoji(int(user.ReasonId))
+			return &proto.EmojiAnswer{
+				DisplayName: emojiAnswer,
+			}, nil
+		}
+	}
+	return nil, err
 }
